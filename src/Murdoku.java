@@ -63,6 +63,8 @@ public class Murdoku {
     public static void main(String[] args) {
 
         mostrarTablero();
+
+        mostrarPersonajes();
     }
 
     // Devuelve el símbolo correspondiente a un elemento
@@ -123,7 +125,20 @@ public class Murdoku {
         System.out.println();
     }
 
+}
 
+// Muestra los personajes que todavía NO se han colocado en el tablero
 
+public static void mostrarPersonajes(){
+
+    System.out.println("Personajes pendientes: ");
+
+    for (int i = 0; i < nombres.length; i++) {
+        
+        if (colocados[i] == false) {
+
+            System.out.println(letras[i] + " - " + nombres[i]);
+        }
+    }
 }
 }
