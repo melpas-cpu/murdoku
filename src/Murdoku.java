@@ -62,6 +62,7 @@ public class Murdoku {
 
     public static void main(String[] args) {
 
+        mostrarTablero();
     }
 
     // Devuelve el símbolo correspondiente a un elemento
@@ -105,4 +106,24 @@ public class Murdoku {
 
     }
 
+    public static void mostrarTablero(){
+
+        System.out.println("    1 2 3 4 5 6 7"); //Numero de las columnas para identificar las coordenadas
+
+        for (int fila = 0; fila < TAM; fila++) {  //Recorrer las filas del tablero
+            
+             System.out.print((fila + 1) + " | ");
+
+        for (int columna = 0; columna < TAM; columna++) { //Recorrer las 7 columnas de cada fila
+
+            System.out.print(simboloElemento(elementos[fila][columna]) + " ");
+
+        }
+
+        System.out.println();
+    }
+
+
+
+}
 }
