@@ -62,10 +62,44 @@ public class Murdoku {
 
     public static void main(String[] args) {
 
+      int opcion;
+
+    do {
+
         mostrarTablero();
 
         mostrarPersonajes();
-    }
+
+        mostrarMenu();
+
+        opcion = teclado.nextInt();
+
+        switch (opcion) {
+
+            case 1:
+                System.out.println("Has elegido colocar un personaje.");
+                break;
+
+            case 2:
+                System.out.println("Has elegido eliminar un personaje.");
+                break;
+
+            case 3:
+                System.out.println("Has elegido resolver el caso.");
+                break;
+
+            case 0:
+                System.out.println("Hasta pronto.");
+                break;
+
+            default:
+                System.out.println("Opcion incorrecta.");
+
+        }
+
+    } while (opcion != 0);
+
+}
 
     // Devuelve el símbolo correspondiente a un elemento
     public static char simboloElemento(int elemento) {
@@ -108,6 +142,17 @@ public class Murdoku {
 
     }
 
+    public static void mostrarMenu() {
+
+    System.out.println("===== MURDOKU =====");
+    System.out.println("1. Colocar personaje");
+    System.out.println("2. Eliminar personaje");
+    System.out.println("3. Resolver el caso");
+    System.out.println("0. Salir");
+    System.out.print("Elige una opcion: ");
+
+}
+
     public static void mostrarTablero(){
 
         System.out.println("    1 2 3 4 5 6 7"); //Numero de las columnas para identificar las coordenadas
@@ -127,18 +172,21 @@ public class Murdoku {
 
 }
 
-// Muestra los personajes que todavía NO se han colocado en el tablero
+    // Muestra los personajes que todavía NO se han colocado en el tablero
 
-public static void mostrarPersonajes(){
+    public static void mostrarPersonajes(){
 
-    System.out.println("Personajes pendientes: ");
+        System.out.println("Personajes pendientes: ");
 
-    for (int i = 0; i < nombres.length; i++) {
+        for (int i = 0; i < nombres.length; i++) {
         
-        if (colocados[i] == false) {
+            if (colocados[i] == false) {
 
             System.out.println(letras[i] + " - " + nombres[i]);
+            }
         }
     }
-}
+
+
+
 }
