@@ -77,7 +77,7 @@ public class Murdoku {
         switch (opcion) {
 
             case 1:
-                System.out.println("Has elegido colocar un personaje.");
+                colocarPersonaje();
                 break;
 
             case 2:
@@ -100,6 +100,208 @@ public class Murdoku {
     } while (opcion != 0);
 
 }
+
+    public static void mostrarTablero(){
+
+        System.out.println("    1 2 3 4 5 6 7"); //Numero de las columnas para identificar las coordenadas
+
+        for (int fila = 0; fila < TAM; fila++) {  //Recorrer las filas del tablero
+            
+             System.out.print((fila + 1) + " | ");
+
+        for (int columna = 0; columna < TAM; columna++) { //Recorrer las 7 columnas de cada fila
+
+            if (tablero[fila][columna] != '\0') {
+
+                System.out.print(tablero[fila][columna] + " ");
+
+                } else {
+
+                    System.out.print(simboloElemento(elementos[fila][columna]) + " ");
+
+            }
+
+        }
+
+        System.out.println();
+    }
+
+}
+
+    // Muestra los personajes que todavía NO se han colocado en el tablero
+    public static void mostrarPersonajes(){
+
+        System.out.println("Personajes pendientes: ");
+
+        for (int i = 0; i < nombres.length; i++) {
+        
+            if (colocados[i] == false) {
+
+            System.out.println(letras[i] + " - " + nombres[i]);
+            }
+        }
+    }
+
+    public static void mostrarMenu() {
+
+        System.out.println("===== MURDOKU =====");
+        System.out.println("1. Colocar personaje");
+        System.out.println("2. Eliminar personaje");
+        System.out.println("3. Resolver el caso");
+        System.out.println("0. Salir");
+        System.out.print("Elige una opcion: ");
+
+}
+
+    // Permitir colocar un personaje en el tablero
+    public static void colocarPersonaje() {
+
+        System.out.print("Introduce la letra del personaje: ");
+        char letra = teclado.next().toUpperCase().charAt(0);
+
+        int indice = -1;
+
+        // Buscar el personaje en el array
+        for (int i = 0; i < letras.length; i++) {
+
+            if (letras[i] == letra) {
+
+                indice = i;
+
+            }
+
+        }
+
+        // Comprobacion que el personaje existe
+        if (indice == -1) {
+
+            System.out.println("Personaje no encontrado.");
+            return;
+
+        }
+
+        // Comprobacion que no este colocado anteriormente
+        if (colocados[indice] == true) {
+
+            System.out.println("Este personaje ya esta colocado.");
+            return;
+
+        }
+
+        System.out.print("Introduce la fila (1-7): ");
+        int fila = teclado.nextInt() - 1;
+
+        System.out.print("Introduce la columna (1-7): ");
+        int columna = teclado.nextInt() - 1;
+
+        // Comprobacion de los limites del tablero
+        if (fila < 0 || fila >= TAM || columna < 0 || columna >= TAM) {
+
+            System.out.println("Coordenadas incorrectas.");
+            return;
+
+        }
+
+        // Comprobacion si la casilla es transitable
+        if (esTransitable(fila, columna) == false) {
+
+            System.out.println("Esta casilla no es transitable.");
+            return;
+
+        }
+
+        // Comprobacion si la casilla esta ocupada
+        if (tablero[fila][columna] != '\0') {
+
+            System.out.println("Esta casilla ya esta ocupada.");
+            return;
+
+        }
+
+        // Comprobacion de la pista de Avery
+        if (letra == 'A' && elementos[fila][columna] != ALFOMBRA) {
+
+            System.out.println("Avery debe estar sobre una alfombra.");
+            return;
+
+        }
+
+        // Comprobacion de la pista de Bruno
+        if (letra == 'B' && (elementos[fila][columna] != SILLA || zonas[fila][columna] != CENADOR)) {
+
+            System.out.println("Bruno debe estar en una silla del cenador.");
+            return;
+
+        }
+
+        // Comprobacion de la pista de Christian
+        if (letra == 'C' && zonas[fila][columna] != PICNIC) {
+
+            System.out.println("Christian debe estar en la zona de picnic.");
+            return;
+
+        }
+
+        // Comprobacion de la pista de Daphne
+        if (letra == 'D' &&
+            (!tieneAlrededor(fila, columna, FLORES) ||
+            !tieneAlrededor(fila, columna, ARBOL))) {
+
+            System.out.println("Daphne debe estar junto a las flores y a un arbol.");
+            return;
+
+        }
+
+        // Comprobacion de la pista de Ethan
+        if (letra == 'E' && elementos[fila][columna] != SILLA) {
+
+            System.out.println("Ethan debe estar en una silla.");
+            return;
+
+        }
+
+        // Comprobacion que la pista de Fabian
+        if (letra == 'F' && zonas[fila][columna] != ESTANQUE) {
+
+            System.out.println("Fabian debe estar en la zona del estanque.");
+            return;
+
+        }
+
+
+        // Comprobación de si hay otro personaje en la misma fila
+        for (int i = 0; i < TAM; i++) {
+
+            if (tablero[fila][i] != '\0') {
+
+                System.out.println("Ya hay un personaje en esa fila.");
+                return;
+
+            }
+
+        }
+
+        // Comprobamos si hay otro personaje en la misma columna
+        for (int i = 0; i < TAM; i++) {
+
+            if (tablero[i][columna] != '\0') {
+
+                System.out.println("Ya hay un personaje en esa columna.");
+                return;
+
+            }
+
+        }
+
+        // Colocamos el personaje
+        tablero[fila][columna] = letra;
+
+        colocados[indice] = true;
+
+        System.out.println("Personaje colocado correctamente.");
+
+    }
+
 
     // Devuelve el símbolo correspondiente a un elemento
     public static char simboloElemento(int elemento) {
@@ -142,51 +344,29 @@ public class Murdoku {
 
     }
 
-    public static void mostrarMenu() {
+    public static boolean tieneAlrededor(int fila, int columna, int elemento) {
 
-    System.out.println("===== MURDOKU =====");
-    System.out.println("1. Colocar personaje");
-    System.out.println("2. Eliminar personaje");
-    System.out.println("3. Resolver el caso");
-    System.out.println("0. Salir");
-    System.out.print("Elige una opcion: ");
-
-}
-
-    public static void mostrarTablero(){
-
-        System.out.println("    1 2 3 4 5 6 7"); //Numero de las columnas para identificar las coordenadas
-
-        for (int fila = 0; fila < TAM; fila++) {  //Recorrer las filas del tablero
-            
-             System.out.print((fila + 1) + " | ");
-
-        for (int columna = 0; columna < TAM; columna++) { //Recorrer las 7 columnas de cada fila
-
-            System.out.print(simboloElemento(elementos[fila][columna]) + " ");
-
+        // arriba
+        if (fila > 0 && elementos[fila - 1][columna] == elemento) {
+            return true;
         }
 
-        System.out.println();
-    }
-
-}
-
-    // Muestra los personajes que todavía NO se han colocado en el tablero
-
-    public static void mostrarPersonajes(){
-
-        System.out.println("Personajes pendientes: ");
-
-        for (int i = 0; i < nombres.length; i++) {
-        
-            if (colocados[i] == false) {
-
-            System.out.println(letras[i] + " - " + nombres[i]);
-            }
+        // abajo
+        if (fila < TAM - 1 && elementos[fila + 1][columna] == elemento) {
+            return true;
         }
+
+        // izquierda
+        if (columna > 0 && elementos[fila][columna - 1] == elemento) {
+            return true;
+        }
+
+        // derecha
+        if (columna < TAM - 1 && elementos[fila][columna + 1] == elemento) {
+            return true;
+        }
+
+        return false;
     }
-
-
 
 }
